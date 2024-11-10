@@ -1,0 +1,2 @@
+# smart_search_algorithm
+Zero_Squares_Game
