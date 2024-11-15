@@ -4,7 +4,7 @@ In Order to run the game :
 
     ------>pip install pygame<------
 
-2 - After downloading the livrary , type the  
+2 - After downloading the library , type the  
     following command in Terminal to run the game:
 
     ------>python main.py<------
