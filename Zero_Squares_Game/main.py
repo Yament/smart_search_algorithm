@@ -1,4 +1,7 @@
 
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 from Zero_Squares_LeveLs import Zero_Squares_LeveLs
 from Level_Selection_Menu import Level_Selection_Menu
 from Main_Menu_GUI import Main_Menu_GUI
