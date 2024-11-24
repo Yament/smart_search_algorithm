@@ -2,6 +2,7 @@
 from User_Play import User_Play
 from Depth_First_Search import Depth_First_Search
 from Breadth_First_Search import Breadth_First_Search
+from UCS import UCS
 
 
  
@@ -21,6 +22,12 @@ class Zero_Squares_Game:
     def Breadth_First_Search(self) :
         game = Breadth_First_Search(self.init_state)
         game.Breadth_First_Search_Solve()
+
+    def Unifrom_Cost_Search(self) :
+        game = UCS(self.init_state)
+        game.UCS()
+
+         
     
    
 

@@ -28,19 +28,19 @@ class Square_In_State:
         elif self.type == 'Orange':
             return '🟧'               
         elif self.type == 'RedGoal':
-           return '🔲🟥' 
+           return '🔴' 
         elif self.type == 'OrangeGoal':
-           return '🔲🟧'
+           return '🟠'
         elif self.type == 'BlueGoal':
-           return '🔲🟦'
+           return '🔵'
         elif self.type == 'YellowGoal':
-           return '🔲🟨' 
+           return '🟡' 
         elif self.type == 'GreenGoal':
-           return '🔲🟩'        
+           return '🟢'        
         elif self.type == 'BlackWhite':
-           return '🔲⬛' 
+           return '🔲' 
         elif self.type == 'WhiteWhite':
-           return '🔲⬜' 
+           return '🔳' 
 
     def __eq__(self, other):
         if not isinstance(other, Square_In_State):
@@ -57,3 +57,4 @@ class Square_In_State:
             self.In_Place == other.In_Place
         )
         
+

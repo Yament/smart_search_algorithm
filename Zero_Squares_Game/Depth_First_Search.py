@@ -1,7 +1,9 @@
 
 from copy import deepcopy
 from Draw_Board_Pygame import Draw_Board_Pygame
-
+import psutil
+import time 
+import os 
 
 class Depth_First_Search:
 
@@ -10,14 +12,21 @@ class Depth_First_Search:
         self.current_state = deepcopy(init_state)
         self.Path_Goal_List = []
         self.visited_States_Number = 0
-
         self.stack = []
         self.stack.append(init_state)
         self.visited = []
         self.visited.append(init_state)
         self.Draw = Draw_Board_Pygame()
+    
+    def get_memory_usage(self):
+        process = psutil.Process(os.getpid())
+        memory_info = process.memory_info()
+        memory_mb = memory_info.rss / 1024 / 1024
+        return memory_mb
 
     def Depth_First_Search_Solve(self) :
+        start_time = time.time()
+        initial_memory = self.get_memory_usage()
         while self.stack :
             self.current_state = self.stack.pop()
             if self.current_state.isGoal() :
@@ -45,6 +54,17 @@ class Depth_First_Search:
                 print (Length)
                 print("the Number States That Visited are :")           
                 print (self.visited_States_Number)
+
+
+                end_time = time.time()
+                execution_time = end_time - start_time
+                print("Time taken by the algorithm : ")
+                print (execution_time)
+
+                final_memory = self.get_memory_usage()
+                memory_used = final_memory - initial_memory
+                print(f"Memory Used: {memory_used:.2f} MB")
+                print(f"Total Memory Usage: {final_memory:.2f} MB")
 
                 return None
             

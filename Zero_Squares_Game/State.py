@@ -11,6 +11,10 @@ class State:
         self.Players_List  = self.Get_All_Players()
         self.direction = None
         self.Parent = None
+        self.cost = None
+
+    def __lt__(self, other):
+        return self.cost < other.cost  # For priority queue comparison
     
     def __str__(self)-> str:
         result = ""
@@ -286,6 +290,7 @@ class State:
                         parent.change_Player_Move(square)
                      
                 parent.direction = direction
+                parent.cost = 1
                 Next_States.append(deepcopy(parent))
     
         return Next_States
