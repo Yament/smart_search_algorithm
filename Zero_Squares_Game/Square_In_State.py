@@ -57,4 +57,9 @@ class Square_In_State:
             self.In_Place == other.In_Place
         )
         
+    def __hash__(self):
+        return hash((self.x , self.y ,
+                      self.new_x , self.new_y ,
+                          self.type , self.prev_type ,
+                            self.Role , self.target_square , self.In_Place))
 

@@ -9,12 +9,11 @@ class State:
         self.cols = cols
         self.board = board
         self.Players_List  = self.Get_All_Players()
-        self.direction = None
         self.Parent = None
         self.cost = None
 
     def __lt__(self, other):
-        return self.cost < other.cost  # For priority queue comparison
+        return self.cost < other.cost  
     
     def __str__(self)-> str:
         result = ""
@@ -27,13 +26,10 @@ class State:
     def __eq__(self, other):
         if not isinstance(other, State):
             return False
-        return (
-            self.rows == other.rows and
-            self.cols == other.cols and
-            # self.direction == other.direction and
-            self.Players_List == other.Players_List and
-            self.board == other.board
-        )
+        return (self.board == other.board)
+
+    def __hash__(self):
+        return hash(tuple(tuple(row) for row in self.board))
 
     def Get_All_Players(self):
         Players_List = []

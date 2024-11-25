@@ -14,8 +14,8 @@ class Depth_First_Search:
         self.visited_States_Number = 0
         self.stack = []
         self.stack.append(init_state)
-        self.visited = []
-        self.visited.append(init_state)
+        self.visited = set()
+        self.visited.add(init_state)
         self.Draw = Draw_Board_Pygame()
     
     def get_memory_usage(self):
@@ -30,7 +30,7 @@ class Depth_First_Search:
         while self.stack :
             self.current_state = self.stack.pop()
             if self.current_state.isGoal() :
-                self.visited.append(deepcopy(self.current_state))
+                self.visited.add(deepcopy(self.current_state))
                 print(self.current_state)
                 self.Draw.draw_Screen_Game(self.current_state.board)
                 print("Gaaaaaaaaaame Oveeeeeeeeeeeer")
@@ -70,27 +70,15 @@ class Depth_First_Search:
             
             print(self.current_state)
             self.Draw.draw_Screen_Game(self.current_state.board)  
-
-            visited = False
-            for vis in self.visited :
-                if self.current_state == vis :
-                    visited = True
-                    break
-            if visited == False:
-                self.visited.append(self.current_state)
-
             Next_States = self.current_state.Get_Next_States()           
-            for state in Next_States :
+            for state in Next_States :               
                 if state.isLoss() :
                     continue
-                visited = False
-                for vis in self.visited :                                              
-                    if state == vis :
-                        visited = True
-                        break               
-                if visited == False:
+                if state not in self.visited :
                     state.Parent = self.current_state
                     self.visited_States_Number += 1 
-                    self.stack.append(state)    
+                    self.visited.add(state)
+                    self.stack.append(state)                
+           
         return None
         
