@@ -7,6 +7,7 @@ import time
 import os
 
 class Breadth_First_Search:
+    
     def __init__(self , init_state) -> None:
         self.init_state = init_state
         self.current_state = deepcopy(init_state)
@@ -14,8 +15,8 @@ class Breadth_First_Search:
         self.visited_States_Number = 0
         self.queue = deque()
         self.queue.append(init_state)
-        self.visited = []
-        self.visited.append(init_state)
+        self.visited = set()
+        self.visited.add(init_state)
         self.Draw = Draw_Board_Pygame()
 
     def get_memory_usage(self):
@@ -30,7 +31,7 @@ class Breadth_First_Search:
         while self.queue :
             self.current_state = self.queue.popleft()
             if self.current_state.isGoal() :
-                self.visited.append(deepcopy(self.current_state))
+                self.visited.add(deepcopy(self.current_state))
                 print(self.current_state)
                 self.Draw.draw_Screen_Game(self.current_state.board)
                 print("Gaaaaaaaaaame Oveeeeeeeeeeeer")
@@ -68,29 +69,17 @@ class Breadth_First_Search:
                 return None
             
             print(self.current_state)
-            self.Draw.draw_Screen_Game(self.current_state.board)  
-            visited = False
-            for vis in self.visited :
-                if self.current_state == vis :
-                    visited = True
-                    break
-
-            if visited == False:
-                self.visited.append(self.current_state)
-
+            self.Draw.draw_Screen_Game(self.current_state.board) 
             Next_States = self.current_state.Get_Next_States()           
-            for state in Next_States :
+            for state in Next_States :               
                 if state.isLoss() :
                     continue
-                visited = False
-                for vis in self.visited :                                              
-                    if state == vis :
-                        visited = True
-                        break               
-                if visited == False:
+                if state not in self.visited :
                     state.Parent = self.current_state
                     self.visited_States_Number += 1 
-                    self.queue.append(state)    
+                    self.visited.add(state)
+                    self.queue.append(state)     
+
         return None
         
 

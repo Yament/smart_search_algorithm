@@ -34,12 +34,13 @@ class Options_Menu_GUI :
             screen.fill((220, 240, 240)) 
             User_PLay_button = self.draw_button(screen, "User PLay", (WINDOW_WIDTH // 2  , WINDOW_HEIGHT // 2 - 250), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             DFS_button = self.draw_button(screen, "Depth_First_Search", (WINDOW_WIDTH // 2 - 300, WINDOW_HEIGHT // 2 - 150), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
+            DFS_R_button = self.draw_button(screen, "Depth_First_Search_Recursion",(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 180), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             BFS_button = self.draw_button(screen, "Breadth_First_Search", (WINDOW_WIDTH // 2 - 300, WINDOW_HEIGHT // 2 - 50), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             UCS_button = self.draw_button(screen, "Uniform_Cost_Search", (WINDOW_WIDTH // 2 - 300, WINDOW_HEIGHT // 2 + 50), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             HCS_button = self.draw_button(screen, "Hill_Climbing_Search", (WINDOW_WIDTH // 2 + 300, WINDOW_HEIGHT // 2 - 150), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             AStar_button = self.draw_button(screen, "A* Search Algorithm", (WINDOW_WIDTH // 2 + 300, WINDOW_HEIGHT // 2 - 50), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             Select_Level = self.draw_button(screen, "Select_Level", (WINDOW_WIDTH // 2 + 300, WINDOW_HEIGHT // 2 + 50), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
-            Go_Back_button  = self.draw_button(screen, "Go Back Menu", (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 180), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
+            Go_Back_button  = self.draw_button(screen, "Go Back Menu", (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 290), DARK_BLUE_BUTTON, LIGHT_BLUE, font)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -51,6 +52,9 @@ class Options_Menu_GUI :
                     elif DFS_button.collidepoint(event.pos):
                         game = Zero_Squares_Game(init_State)
                         game.Depth_First_Search()
+                    elif DFS_R_button.collidepoint(event.pos):
+                        game = Zero_Squares_Game(init_State)
+                        game.Depth_First_Search_Recursion()
                     elif BFS_button.collidepoint(event.pos):
                         game = Zero_Squares_Game(init_State)
                         game.Breadth_First_Search()
