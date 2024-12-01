@@ -1,6 +1,7 @@
 
 from copy import deepcopy
 from Directions import Directions
+import copy
 
 class State:
 
@@ -10,10 +11,35 @@ class State:
         self.board = board
         self.Players_List  = self.Get_All_Players()
         self.Parent = None
-        self.cost = None
+        self.cost = 0
+        self.Manhattan_Distance_Hurestic = 0
+
+    def copy(self):
+        new_board = [[square.copy() for square in row] for row in self.board]
+        new_state = State(self.rows, self.cols, new_board)
+        new_state.Parent = self.Parent
+        new_state.cost = self.cost
+        new_state.x = self.rows
+        new_state.y = self.cols 
+        return new_state 
 
     def __lt__(self, other):
         return self.cost < other.cost  
+
+    def Get_Manhattan_Distance_Hurestic (self) :
+        Player_List = self.Get_All_Players()
+        Manhattan_Distance_List = []
+        for square in Player_List :
+            Target = self.Get_Target_Square(square.target_square)
+            Manhattan_Distance_Hurestic = abs(square.x - Target.x) + abs(square.y - Target.y)
+            Manhattan_Distance_List.append(Manhattan_Distance_Hurestic)
+        Manhattan_Distance = 0
+        for Hurestic in Manhattan_Distance_List :
+            Manhattan_Distance += Hurestic
+        square.Manhattan_Distance_Hurestic = Manhattan_Distance
+            
+
+        
     
     def __str__(self)-> str:
         result = ""
@@ -38,14 +64,16 @@ class State:
                 if square.Role == 'Player' and  square.In_Place == False :
                     Players_List.append(square)
 
-        return Players_List
-                    
-    def getPlayerCoordinates(self):
+        return Players_List                 
+     
+
+    def Get_Target_Square(self , type):
         for row in self.board:
             for square in row:
-                if square.type == 'Red':
-                    return square.x , square.y
-     
+                if square.prev_type == type:
+                    return square
+
+
     def getTargetCoordinates(self , type):
         Target_Squares_List = [] 
         for row in self.board:
@@ -130,15 +158,32 @@ class State:
             return False   
         else:
             return True
+        
+    def Get_All_Targets(self):
+        Targets_List = []
+        for row in self.board:
+            for square in row:
+                if square.Role == 'PlayerGoal':
+                    Targets_List.append(square)
+        return Targets_List 
+    
+    def Player_without_Targets(self , square) :
+        result = True
+        Targets = self.Get_All_Targets()
+        for Target in Targets :
+            if Target.prev_type == square.target_square :
+                result = False
+                break
+        return result
 
-    def playerReachTarget(self , x , y , square):
+    def player_Reach_Target(self , x , y , square):
         Target_Squares_List = self.getTargetCoordinates(square.target_square)
         if (Target_Squares_List) :
             for Target in Target_Squares_List :
                 if Target.x == x + square.x and Target.y == y + square.y :
                     square.In_Place = True               
                     return True
-        return False
+            return False
 
     def player_Reach_To_Loss_Square(self , x , y , square):
             if self.board[square.x + x ][square.y + y].type == 'BlackWhite':
@@ -146,148 +191,51 @@ class State:
             return False
 
     def player_Reach_To_Variable_Square(self , x , y , square):
-            if self.board[square.x + x ][square.y + y].type == 'WhiteWhite':
+            if self.board[square.x + x ][square.y + y].prev_type == 'WhiteWhite':
                 return True           
             return False
 
     def Get_Next_States(self):
-        directions = Directions()
+        directions = Directions().Return_Directions()
         Next_States = []
-        for direction in directions.Return_Directions() :
-                parent = deepcopy(self)
-
-                ########################################################## MOVE UP
+        for direction, (dx, dy) in directions.items():
+            loss_Square = False
+            parent = self.copy()
+            Players_can_move = [
+                player for player in parent.Players_List 
+                if parent.checkMove(dx, dy, player)]
+            if not Players_can_move:
+                continue
+            if direction in ['DOWN', 'RIGHT']:
+                Players_can_move.reverse()
+            for square in Players_can_move:
+                x, y = 0, 0
+                while True:
+                    x += dx
+                    y += dy   
+                    if not parent.checkMove(x, y, square):
+                        break    
+                    if parent.player_Reach_Target(x, y, square):
+                        x, y = x + dx, y + dy
+                        break   
+                    if parent.player_Reach_To_Loss_Square(x, y, square):
+                        loss_Square = True
+                        break 
+                    if parent.player_Reach_To_Variable_Square(x, y, square):
+                        parent.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square)                    
                 if direction == 'UP':
-                    Players_can_move = []
-                    for player in parent.Players_List :
-                        if(parent.checkMove(-1 , 0 , player)):
-                            Players_can_move.append(player)
-                        else :
-                            continue
-
-                    if Players_can_move == [] :
-                        continue                   
-
-                    for square in Players_can_move:                                             
-                        x , y = 0 , 0
-                        while (True) :
-                            x = x - 1 
-                            if not parent.checkMove(x , y , square) :
-                                break
-                            if parent.playerReachTarget(x , y , square) :
-                                x = x - 1
-                                break
-                            if parent.player_Reach_To_Loss_Square(x , y , square) :
-                                x = x - 1
-                                break
-                            if parent.player_Reach_To_Variable_Square(x , y , square) :
-                                parent.change_Variable_Square_To_Goal_Square(square.x + x , square.y + y , square.target_square)         
-                        new_player_x , new_player_y = square.x + x + 1 , square.y + y
-                        square.new_x , square.new_y = new_player_x , new_player_y
-                        parent.change_Player_Move(square)
-                                      
-
-                ########################################################## MOVE DOWN
+                    new_x, new_y = square.x + x - dx, square.y + y
                 elif direction == 'DOWN':
-
-                    Players_can_move = []
-                    for player in parent.Players_List :
-                        if(parent.checkMove(1 , 0 , player)):
-                            Players_can_move.append(player)
-                        else :
-                            continue
-
-                    if Players_can_move == [] :
-                        continue 
-                        
-                    Players_can_move.reverse()    
-                    for square in Players_can_move:                                                     
-                        x , y = 0 , 0
-                        while (True) :
-                            x = x + 1
-                            if not parent.checkMove(x , y , square) :
-                                break
-                            if parent.playerReachTarget(x , y , square) :
-                                x = x + 1
-                                break 
-                            if parent.player_Reach_To_Loss_Square(x , y , square) :
-                                x = x + 1
-                                break
-                            if parent.player_Reach_To_Variable_Square(x , y , square) :                       
-                                parent.change_Variable_Square_To_Goal_Square(square.x + x , square.y + y , square.target_square) 
-                        new_player_x , new_player_y = square.x + x - 1 , square.y + y
-                        square.new_x , square.new_y = new_player_x , new_player_y
-                        parent.change_Player_Move(square)
-                                                              
-                
-                ########################################################## MOVE LEFT
-                elif direction == 'LEFT' :
-
-                    Players_can_move = []
-                    for player in parent.Players_List :
-                        if(parent.checkMove(0 , -1 , player)):
-                            Players_can_move.append(player)
-                        else :
-                            continue   
-                      
-                    if Players_can_move == [] :
-                        continue
-                         
-                    for square in Players_can_move:                
-                        x , y = 0 , 0
-                        while (True) :
-                            y = y - 1
-                            if not parent.checkMove(x , y , square) :
-                                break
-                            if parent.playerReachTarget(x , y , square) :
-                                y = y - 1
-                                break
-                            if parent.player_Reach_To_Loss_Square(x , y , square) :
-                                y = y - 1
-                                break
-                            if parent.player_Reach_To_Variable_Square(x , y , square) :
-                                parent.change_Variable_Square_To_Goal_Square(square.x + x , square.y + y , square.target_square) 
-                        new_player_x , new_player_y = square.x + x , square.y + y + 1
-                        square.new_x , square.new_y = new_player_x , new_player_y
-                        parent.change_Player_Move(square) 
-                         
-
-                ########################################################## MOVE RIGHT
-                elif direction == 'RIGHT' :
-
-                    Players_can_move = []
-                    for player in parent.Players_List :
-                        if(parent.checkMove(0 , 1 , player)):
-                            Players_can_move.append(player)
-                        else :
-                            continue  
-
-                    if Players_can_move == [] :
-                        continue
-
-
-                    Players_can_move.reverse()
-                    for square in Players_can_move:              
-                        x , y = 0 , 0
-                        while (True) :
-                            y = y + 1
-                            if not parent.checkMove(x , y , square) :
-                                break
-                            if parent.playerReachTarget(x , y , square) :
-                                y = y + 1
-                                break
-                            if parent.player_Reach_To_Loss_Square(x , y , square) :
-                                y = y + 1
-                                break
-                            if parent.player_Reach_To_Variable_Square(x , y , square) :
-                                parent.change_Variable_Square_To_Goal_Square(square.x + x , square.y + y , square.target_square) 
-                        new_player_x , new_player_y = square.x + x , square.y + y - 1
-                        square.new_x , square.new_y = new_player_x , new_player_y
-                        parent.change_Player_Move(square)
-                     
-                parent.direction = direction
-                parent.cost = 1
-                Next_States.append(deepcopy(parent))
-    
+                    new_x, new_y = square.x + x - dx, square.y + y
+                elif direction == 'LEFT':
+                    new_x, new_y = square.x + x, square.y + y - dy
+                else:   
+                    new_x, new_y = square.x + x , square.y + y - dy
+                square.new_x, square.new_y = new_x, new_y
+                parent.change_Player_Move(square) 
+            if loss_Square == True:
+                    continue   
+            parent.cost = 1
+            Next_States.append(parent)  
         return Next_States
-                
+ 
