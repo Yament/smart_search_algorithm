@@ -13,6 +13,7 @@ class State:
         self.Parent = None
         self.cost = 0
         self.Manhattan_Distance_Hurestic = 0
+        self.A_Star_Hurestic = 0
 
     def copy(self):
         new_board = [[square.copy() for square in row] for row in self.board]
@@ -24,7 +25,7 @@ class State:
         return new_state 
 
     def __lt__(self, other):
-        return self.cost < other.cost  
+        return self.A_Star_Hurestic < other.A_Star_Hurestic  
 
     def Get_Manhattan_Distance_Hurestic (self) :
         Player_List = self.Get_All_Players()
@@ -35,8 +36,8 @@ class State:
             Manhattan_Distance_List.append(Manhattan_Distance_Hurestic)
         Manhattan_Distance = 0
         for Hurestic in Manhattan_Distance_List :
-            Manhattan_Distance += Hurestic
-        square.Manhattan_Distance_Hurestic = Manhattan_Distance
+            Manhattan_Distance = Manhattan_Distance + Hurestic
+        self.Manhattan_Distance_Hurestic = Manhattan_Distance
             
 
         
@@ -236,6 +237,8 @@ class State:
             if loss_Square == True:
                     continue   
             parent.cost = 1
+            parent.Get_Manhattan_Distance_Hurestic()
+            parent.A_Star_Hurestic = parent.cost + parent.Manhattan_Distance_Hurestic
             Next_States.append(parent)  
         return Next_States
  
