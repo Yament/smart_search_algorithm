@@ -58,6 +58,7 @@ class Level_Selection_Menu :
                         for i, rect in enumerate(buttons):
                             if rect.collidepoint(event.pos):
                                 print(f"Level {i + 1} selected!")
+                                # pygame.quit()
                                 return i + 1
                 elif event.type == pygame.MOUSEWHEEL:
                     # Scroll logic

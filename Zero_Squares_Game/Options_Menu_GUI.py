@@ -61,6 +61,9 @@ class Options_Menu_GUI :
                     elif UCS_button.collidepoint(event.pos):
                         game = Zero_Squares_Game(init_State)
                         game.Unifrom_Cost_Search()
+                    elif HCS_button.collidepoint(event.pos):
+                        game = Zero_Squares_Game(init_State)
+                        game.Hill_Climbing_Search()
                     elif Select_Level.collidepoint(event.pos):
                         Level_Object = Level_Selection_Menu()
                         Level_Selected = Level_Object.level_selection_menu() - 1
