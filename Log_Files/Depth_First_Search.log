@@ -1,0 +1,21 @@
+Algorithm: DFS
+Level: 10
+Visited Nodes: 166
+Solution Path Nodes: 61
+Execution Time: 1.65 ms
+Memory Used: 7.05 MB
+---
+Algorithm: DFS
+Level: 20
+Visited Nodes: 272
+Solution Path Nodes: 51
+Execution Time: 2.49 ms
+Memory Used: 4.23 MB
+---
+Algorithm: DFS
+Level: 30
+Visited Nodes: 891
+Solution Path Nodes: 183
+Execution Time: 9.70 ms
+Memory Used: 26.23 MB
+---

@@ -1,0 +1,21 @@
+Algorithm: BFS
+Level: 10
+Visited Nodes: 300
+Solution Path Nodes: 45
+Execution Time: 1.87 ms
+Memory Used: 8.44 MB
+---
+Algorithm: BFS
+Level: 20
+Visited Nodes: 3173
+Solution Path Nodes: 14
+Execution Time: 11.34 ms
+Memory Used: 32.51 MB
+---
+Algorithm: BFS
+Level: 30
+Visited Nodes: 83794
+Solution Path Nodes: 23
+Execution Time: 429.99 ms
+Memory Used: 1543.00 MB
+---

@@ -1,0 +1,21 @@
+Algorithm: Recursion_DFS
+Level: 10
+Visited Nodes: 229
+Solution Path Nodes: 102
+Execution Time: 0.83 ms
+Memory Used: 7.20 MB
+---
+Algorithm: Recursion_DFS
+Level: 20
+Visited Nodes: 145
+Solution Path Nodes: 40
+Execution Time: 0.20 ms
+Memory Used: 1.75 MB
+---
+Algorithm: Recursion_DFS
+Level: 30
+Visited Nodes: 154
+Solution Path Nodes: 153
+Execution Time: 1.00 ms
+Memory Used: 10.72 MB
+---

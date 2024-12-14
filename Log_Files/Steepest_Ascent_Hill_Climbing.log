@@ -1,0 +1,21 @@
+Algorithm: Steepest_Ascent_Hill_Climbing
+Level: 10
+Visited Nodes: 3
+Solution Path Nodes: None
+Execution Time: 0.05 ms
+Memory Used: 0.13 MB
+---
+Algorithm: Simple_Hill_Climbing
+Level: 20
+Visited Nodes: 5
+Solution Path Nodes: None
+Execution Time: 0.07 ms
+Memory Used: 0.05 MB
+---
+Algorithm: Simple_Hill_Climbing
+Level: 30
+Visited Nodes: 5
+Solution Path Nodes: None
+Execution Time: 0.06 ms
+Memory Used: 0.03 MB
+---

@@ -1,0 +1,21 @@
+Algorithm: UCS
+Level: 10
+Visited Nodes: 299
+Solution Path Nodes: 45
+Execution Time: 4.39 ms
+Memory Used: 8.39 MB
+---
+Algorithm: UCS
+Level: 20
+Visited Nodes: 2000
+Solution Path Nodes: 14
+Execution Time: 19.00 ms
+Memory Used: 21.79 MB
+---
+Algorithm: UCS
+Level: 30
+Visited Nodes: 32848
+Solution Path Nodes: 23
+Execution Time: 399.84 ms
+Memory Used: 677.91 MB
+---

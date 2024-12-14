@@ -1,0 +1,21 @@
+Algorithm: A*
+Level: 10
+Visited Nodes: 295
+Solution Path Nodes: 45
+Execution Time: 4.31 ms
+Memory Used: 8.32 MB
+---
+Algorithm: A*
+Level: 20
+Visited Nodes: 312
+Solution Path Nodes: 14
+Execution Time: 3.45 ms
+Memory Used: 4.55 MB
+---
+Algorithm: A*
+Level: 30
+Visited Nodes: 3867
+Solution Path Nodes: 23
+Execution Time: 19.59 ms
+Memory Used: 141.27 MB
+---
