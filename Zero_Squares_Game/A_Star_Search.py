@@ -5,7 +5,7 @@ import psutil
 import time 
 import os 
 
-class A_Star:
+class A_Star_Search:
     def __init__(self , init_state) -> None:
         self.init_state = init_state
         self.current_state = deepcopy(init_state)
@@ -17,6 +17,7 @@ class A_Star:
         self.visited = set()  
         self.visited.add(init_state)  
         self.Draw = Draw_Board_Pygame()
+        
     
     def get_memory_usage(self):
         process = psutil.Process(os.getpid())
@@ -29,17 +30,12 @@ class A_Star:
             while(State_From_Goal_Path.Parent != None) :
                 self.Path_Goal_List.append(State_From_Goal_Path)
                 State_From_Goal_Path = State_From_Goal_Path.Parent
-
             self.Path_Goal_List.append(State_From_Goal_Path)
             self.Path_Goal_List.reverse()
             print("all States That Generated Path are:")
             print('\n')
             for state in self.Path_Goal_List :
-                print ("the cost is :")
-                print(state.A_Star_Hurestic)
                 print (state)
-                
-
             print("the Number States From Init State To Goal State are :")
             Length = len(self.Path_Goal_List)
             print (Length)
@@ -55,13 +51,12 @@ class A_Star:
         print(f"Memory Used: {memory_used:.2f} MB")
         print(f"Total Memory Usage: {final_memory:.2f} MB") 
 
-    def A_Star_Solve(self) :
+    def A_Star_Search_Solve(self) :
         start_time = time.time()
         initial_memory = self.get_memory_usage()
         while self.priority_queue :
             self.current_state = heapq.heappop(self.priority_queue)
-            print ("the cost is :")
-            print(self.current_state.cost)
+            self.visited_States_Number += 1
             if self.current_state.isGoal() :
                 self.visited.add(self.current_state) 
                 print(self.current_state)
@@ -80,8 +75,9 @@ class A_Star:
                     continue
                 if state not in self.visited :
                     total_cost = self.current_state.cost + state.cost
-                    state.cost = total_cost               
-                    self.visited_States_Number += 1     
+                    state.cost = total_cost          
+                    state.Get_Manhattan_Distance_Hurestic()
+                    state.A_Star_Hurestic = state.cost + state.Manhattan_Distance_Hurestic          
                     self.visited.add(state)   
                     state.Parent = self.current_state                
                     heapq.heappush(self.priority_queue, state)                    

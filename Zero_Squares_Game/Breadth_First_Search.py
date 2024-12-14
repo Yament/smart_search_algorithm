@@ -58,15 +58,16 @@ class Breadth_First_Search:
         initial_memory = self.get_memory_usage()
         while self.queue :
             self.current_state = self.queue.popleft()
+            self.visited_States_Number += 1 
             if self.current_state.isGoal() :
                 self.visited.add(self.current_state)
-                print(self.current_state)
+                # print(self.current_state)
                 self.Draw.draw_Screen_Game(self.current_state.board)
                 print("Gaaaaaaaaaame Oveeeeeeeeeeeer")
                 self.Print_Path_Goal(self.current_state)
                 self.Get_Time_and_Meomory(start_time , initial_memory)
                 return None        
-            print(self.current_state)
+            # print(self.current_state)
             self.Draw.draw_Screen_Game(self.current_state.board) 
             Next_States = self.current_state.Get_Next_States()           
             for state in Next_States :               
@@ -74,7 +75,6 @@ class Breadth_First_Search:
                     continue
                 if state not in self.visited :
                     state.Parent = self.current_state
-                    self.visited_States_Number += 1 
                     self.visited.add(state)
                     self.queue.append(state)     
         return None

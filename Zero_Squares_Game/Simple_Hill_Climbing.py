@@ -5,7 +5,7 @@ import psutil
 import time 
 import os 
 
-class Hill_Climbing:
+class Simple_Hill_Climbing:
     def __init__(self , init_state) -> None:
         self.init_state = init_state
         self.current_state = deepcopy(init_state)
@@ -35,10 +35,7 @@ class Hill_Climbing:
             print("all States That Generated Path are:")
             print('\n')
             for state in self.Path_Goal_List :
-                print ("the cost is :")
-                print(state.A_Star_Hurestic)
-                print (state)
-                
+                print (state)    
 
             print("the Number States From Init State To Goal State are :")
             Length = len(self.Path_Goal_List)
@@ -55,7 +52,7 @@ class Hill_Climbing:
         print(f"Memory Used: {memory_used:.2f} MB")
         print(f"Total Memory Usage: {final_memory:.2f} MB") 
 
-    def Hill_Climbing_solve(self) :
+    def Simple_Hill_Climbing_solve(self) :
         self.current_state.Get_Manhattan_Distance_Hurestic()
         start_time = time.time()
         initial_memory = self.get_memory_usage()
@@ -68,23 +65,26 @@ class Hill_Climbing:
                 self.Get_Time_and_Meomory(start_time , initial_memory)
                 return None 
             print(self.current_state)
+            self.visited_States_Number += 1
             self.Draw.draw_Screen_Game(self.current_state.board)     
             Next_States = self.current_state.Get_Next_States()  
             if (not Next_States) :
                 continue      
-            current_min = Next_States[0].copy()
-
-            for state in Next_States :               
+            for state in Next_States :
+                state.Get_Manhattan_Distance_Hurestic()
+                print(state.Manhattan_Distance_Hurestic)
+                print(state) 
+                               
                 if state.isLoss() :
                     continue
-                if (state.Manhattan_Distance_Hurestic < current_min.Manhattan_Distance_Hurestic) :
-                    current_min = state.copy()
-            
-            if (current_min.Manhattan_Distance_Hurestic >= self.current_state.Manhattan_Distance_Hurestic) :
+                if (state.Manhattan_Distance_Hurestic >= self.current_state.Manhattan_Distance_Hurestic) :
                     result = False
-                    return self.current_state 
-
-            self.current_state = current_min.copy()            
+                    self.Print_Path_Goal(self.current_state)
+                    self.Get_Time_and_Meomory(start_time , initial_memory)
+                    return self.current_state    
+                self.current_state = state.copy()
+                print (self.current_state)               
+                                      
         return None
        
             

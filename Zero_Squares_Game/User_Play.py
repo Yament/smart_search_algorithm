@@ -69,14 +69,7 @@ class User_Play:
                     break 
                 if self.current_state.player_Reach_To_Variable_Square(x, y, square):
                     self.current_state.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square)                    
-            if direction == 'UP':
-                new_x, new_y = square.x + x - dx, square.y + y
-            elif direction == 'DOWN':
-                new_x, new_y = square.x + x - dx, square.y + y
-            elif direction == 'LEFT':
-                new_x, new_y = square.x + x, square.y + y - dy
-            else:   
-                new_x, new_y = square.x + x , square.y + y - dy
+            new_x, new_y = square.x + x - dx , square.y + y - dy
             square.new_x, square.new_y = new_x, new_y
             self.current_state.change_Player_Move(square) 
   

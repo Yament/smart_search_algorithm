@@ -11,6 +11,7 @@ class Square_In_State:
         self.new_y = new_y
         self.new_x = new_x
         self.In_Place = In_Place
+
  
     def __str__(self)-> str:
         if self.type == "Black":
@@ -36,7 +37,11 @@ class Square_In_State:
         elif self.type == 'YellowGoal':
            return '🟡' 
         elif self.type == 'GreenGoal':
-           return '🟢'        
+           return '🟢'
+        elif self.type == 'GreenYellow':
+           return '🟨'
+        elif self.type == 'OrangeGreen':
+           return '🟩' 
         elif self.type == 'BlackWhite':
            return '🔲' 
         elif self.type == 'WhiteWhite':
@@ -61,7 +66,9 @@ class Square_In_State:
         return hash((self.x , self.y ,
                       self.new_x , self.new_y ,
                           self.type , self.prev_type ,
-                            self.Role , self.target_square , self.In_Place))
+                            self.Role , self.target_square ,
+                              self.In_Place ))
+                              
     
     def copy(self):
         new_square = Square_In_State(self.x , self.y ,

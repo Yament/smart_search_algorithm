@@ -20,18 +20,31 @@ class State:
         new_state = State(self.rows, self.cols, new_board)
         new_state.Parent = self.Parent
         new_state.cost = self.cost
+        new_state.A_Star_Hurestic = self.A_Star_Hurestic
+        new_state.Manhattan_Distance_Hurestic = self.Manhattan_Distance_Hurestic
         new_state.x = self.rows
         new_state.y = self.cols 
         return new_state 
 
     def __lt__(self, other):
-        return self.A_Star_Hurestic < other.A_Star_Hurestic  
+        return self.A_Star_Hurestic < other.A_Star_Hurestic 
+    
+    # def __lt__(self, other):
+    #     return self.cost < other.cost
 
+    def Get_Variable_Square(self):
+        for row in self.board:
+            for square in row:
+                if square.type == 'WhiteWhite' :
+                    return square
+                    
     def Get_Manhattan_Distance_Hurestic (self) :
         Player_List = self.Get_All_Players()
         Manhattan_Distance_List = []
         for square in Player_List :
             Target = self.Get_Target_Square(square.target_square)
+            if(Target == None) :
+                Target = self.Get_Variable_Square()
             Manhattan_Distance_Hurestic = abs(square.x - Target.x) + abs(square.y - Target.y)
             Manhattan_Distance_List.append(Manhattan_Distance_Hurestic)
         Manhattan_Distance = 0
@@ -39,9 +52,6 @@ class State:
             Manhattan_Distance = Manhattan_Distance + Hurestic
         self.Manhattan_Distance_Hurestic = Manhattan_Distance
             
-
-        
-    
     def __str__(self)-> str:
         result = ""
         for row in self.board:
@@ -58,6 +68,11 @@ class State:
     def __hash__(self):
         return hash(tuple(tuple(row) for row in self.board))
 
+    def Check_If_Accept_state(self) :
+        Targets = self.Get_All_Targets()
+        has_duplicates = any(Targets.count(item) > 1 for item in Targets)
+        return has_duplicates
+       
     def Get_All_Players(self):
         Players_List = []
         for row in self.board:
@@ -66,14 +81,12 @@ class State:
                     Players_List.append(square)
 
         return Players_List                 
-     
-
+    
     def Get_Target_Square(self , type):
         for row in self.board:
             for square in row:
                 if square.prev_type == type:
                     return square
-
 
     def getTargetCoordinates(self , type):
         Target_Squares_List = [] 
@@ -120,7 +133,7 @@ class State:
             prev_type = self.board[square.x][square.y].prev_type
             if (prev_type == 'BlueGoal' or prev_type == 'RedGoal' 
                 or prev_type == 'GreenGoal' or prev_type == 'OrangeGoal' 
-                or prev_type == 'YellowGoal' or prev_type == 'YellowGoal') :
+                or prev_type == 'YellowGoal') :
                 self.board[square.x][square.y].type = prev_type
                 self.board[square.x][square.y].Role = 'PlayerGoal'
                 self.board[square.x][square.y].In_Place = True
@@ -134,8 +147,13 @@ class State:
             # change new Player position Square
             self.change_To_White(square.new_x , square.new_y)
         else :
-            # change new Player position Square
-            self.board[square.new_x][square.new_y].type = square.type
+            Type = self.board[square.x][square.y].type
+            if (Type == 'GreenYellow') :
+                self.board[square.new_x][square.new_y].type = 'Yellow'
+            elif (Type == 'OrangeGreen') :
+                self.board[square.new_x][square.new_y].type = 'Green'
+            else :
+                self.board[square.new_x][square.new_y].type = square.type
             self.board[square.new_x][square.new_y].Role = square.Role
             self.board[square.new_x][square.new_y].target_square = square.target_square
             self.board[square.new_x][square.new_y].In_Place = square.In_Place
@@ -164,25 +182,18 @@ class State:
         Targets_List = []
         for row in self.board:
             for square in row:
-                if square.Role == 'PlayerGoal':
-                    Targets_List.append(square)
+                if (square.prev_type == 'BlueGoal' or square.prev_type == 'RedGoal' 
+                or square.prev_type == 'GreenGoal' or square.prev_type == 'OrangeGoal' 
+                or square.prev_type == 'YellowGoal') :
+                    Targets_List.append(square.prev_type)
         return Targets_List 
-    
-    def Player_without_Targets(self , square) :
-        result = True
-        Targets = self.Get_All_Targets()
-        for Target in Targets :
-            if Target.prev_type == square.target_square :
-                result = False
-                break
-        return result
 
     def player_Reach_Target(self , x , y , square):
         Target_Squares_List = self.getTargetCoordinates(square.target_square)
         if (Target_Squares_List) :
             for Target in Target_Squares_List :
                 if Target.x == x + square.x and Target.y == y + square.y :
-                    square.In_Place = True               
+                    square.In_Place = True              
                     return True
             return False
 
@@ -200,16 +211,18 @@ class State:
         directions = Directions().Return_Directions()
         Next_States = []
         for direction, (dx, dy) in directions.items():
+            i = 0
             loss_Square = False
             parent = self.copy()
             Players_can_move = [
                 player for player in parent.Players_List 
-                if parent.checkMove(dx, dy, player)]
+                if parent.checkMove(dx, dy, player)
+                ]
             if not Players_can_move:
                 continue
             if direction in ['DOWN', 'RIGHT']:
                 Players_can_move.reverse()
-            for square in Players_can_move:
+            for square in Players_can_move:           
                 x, y = 0, 0
                 while True:
                     x += dx
@@ -218,27 +231,22 @@ class State:
                         break    
                     if parent.player_Reach_Target(x, y, square):
                         x, y = x + dx, y + dy
+                        i = i + 1
                         break   
                     if parent.player_Reach_To_Loss_Square(x, y, square):
                         loss_Square = True
-                        break 
-                    if parent.player_Reach_To_Variable_Square(x, y, square):
-                        parent.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square)                    
-                if direction == 'UP':
-                    new_x, new_y = square.x + x - dx, square.y + y
-                elif direction == 'DOWN':
-                    new_x, new_y = square.x + x - dx, square.y + y
-                elif direction == 'LEFT':
-                    new_x, new_y = square.x + x, square.y + y - dy
-                else:   
-                    new_x, new_y = square.x + x , square.y + y - dy
+                        break   
+                    if (parent.player_Reach_To_Variable_Square(x, y, square)) :
+                        parent.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square) 
+                    i = i + 1
+                new_x, new_y = square.x + x - dx , square.y + y - dy
                 square.new_x, square.new_y = new_x, new_y
                 parent.change_Player_Move(square) 
+            parent.cost = i
             if loss_Square == True:
                     continue   
-            parent.cost = 1
-            parent.Get_Manhattan_Distance_Hurestic()
-            parent.A_Star_Hurestic = parent.cost + parent.Manhattan_Distance_Hurestic
+            if parent.Check_If_Accept_state():
+                continue  
             Next_States.append(parent)  
         return Next_States
  

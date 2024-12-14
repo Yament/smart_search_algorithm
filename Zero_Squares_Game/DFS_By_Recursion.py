@@ -50,6 +50,7 @@ class DFS_By_Recursion:
     def Depth_First_Search_BY_Recursion(self , current_state) :  
         start_time = time.time()
         initial_memory = self.get_memory_usage()
+        self.visited_States_Number += 1
         if current_state in self.visited:
             return False       
         self.visited.add(current_state)   
@@ -68,8 +69,7 @@ class DFS_By_Recursion:
             if state.isLoss() :
                 continue
             if state not in self.visited :
-                state.Parent = current_state
-                self.visited_States_Number += 1 
+                state.Parent = current_state 
                 result = self.Depth_First_Search_BY_Recursion(state)
                 if result:  
                     return True        

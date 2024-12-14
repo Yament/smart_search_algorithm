@@ -361,6 +361,20 @@ class Zero_Squares_LeveLs :
             ]
 
             ,
+
+            [
+                ['⬜' , '⬜', '⬜', '⬛', '⬛', '⬛', '⬛', '⬜', '⬜'],
+
+                ['⬛' , '⬛', '⬛', '⬛', '🟥', '🟡', '⬛', '⬛', '⬛'],
+
+                ['⬛' , '🔵', '🟧', '🟦', '⬜', '⬜', '⬜', '⬜', '⬛'],
+
+                ['⬛' , '⬜', 'OG', '⬛', '🔴', '⬜', '⬛', 'GY', '⬛'],
+
+                ['⬛' , '⬛', '⬛', '⬛', '⬛', '⬛', '⬛', '⬛', '⬛'],
+            ]
+
+            ,
                 
             [
                 ['⬛' , '⬛', '⬛', '⬛', '⬛', '⬛', '⬛', '⬛', '⬛'],
@@ -599,6 +613,16 @@ class Zero_Squares_LeveLs :
                    role = 'PlayerGoal'
                    target_square = square_type
                    In_Place = True
+                elif init_board[i][j] == 'GY':
+                   square_type = 'GreenYellow'
+                   role = 'Player'
+                   target_square = 'YellowGoal'
+                   In_Place = False
+                elif init_board[i][j] == 'OG':
+                   square_type = 'OrangeGreen'
+                   role = 'Player'
+                   target_square = 'GreenGoal'
+                   In_Place = False
                 elif init_board[i][j] == '⬛':
                     square_type = 'Black'
                     role = 'Block'
@@ -624,6 +648,10 @@ class Zero_Squares_LeveLs :
                 new_y = 0
                 if(role == 'Player') :
                     prev_type = 'White'
+                if square_type == 'OrangeGreen':
+                    prev_type = 'OrangeGoal'
+                if square_type == 'GreenYellow':
+                    prev_type = 'GreenGoal'
                 board[i][j] = Square_In_State(i , j  , new_x , new_y , square_type,prev_type , role , target_square , In_Place ) 
         
         return State(rows , cols , board)

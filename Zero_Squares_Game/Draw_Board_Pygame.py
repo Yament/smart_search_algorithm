@@ -61,6 +61,12 @@ class Draw_Board_Pygame :
                 elif tile.type == 'GreenGoal':
                     pygame.draw.rect(screen, WHITE, (x, y, TILE_SIZE, TILE_SIZE))
                     pygame.draw.rect(screen, GREEN, (x, y, TILE_SIZE, TILE_SIZE),4) 
+                elif tile.type == 'GreenYellow':
+                    pygame.draw.rect(screen, YELLOW, (x, y, TILE_SIZE, TILE_SIZE))
+                    pygame.draw.rect(screen, GREEN, (x, y, TILE_SIZE, TILE_SIZE),4) 
+                elif tile.type == 'OrangeGreen':
+                    pygame.draw.rect(screen, GREEN, (x, y, TILE_SIZE, TILE_SIZE))
+                    pygame.draw.rect(screen, ORANGE, (x, y, TILE_SIZE, TILE_SIZE),4)
                 elif tile.type == 'BlackWhite':
                     pygame.draw.rect(screen, WHITE, (x, y, TILE_SIZE, TILE_SIZE))
                     pygame.draw.rect(screen, BLACK, (x, y, TILE_SIZE, TILE_SIZE),4) 

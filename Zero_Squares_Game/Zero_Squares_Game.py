@@ -4,8 +4,9 @@ from Depth_First_Search import Depth_First_Search
 from Breadth_First_Search import Breadth_First_Search
 from DFS_By_Recursion import DFS_By_Recursion
 from Uniform_Cost_Search import Unifrom_Cost_Search
-from Hill_Climbing import Hill_Climbing
-from A_Star import A_Star
+from Steepest_Ascent_Hill_Climbing import Steepest_Ascent_Hill_Climbing
+from A_Star_Search import A_Star_Search
+from Simple_Hill_Climbing import Simple_Hill_Climbing
 
 
  
@@ -35,13 +36,17 @@ class Zero_Squares_Game:
         game.Unifrom_Cost_Search_Solve()
 
     def A_Star_Search(self) :
-        game = A_Star(self.init_state)
-        game.A_Star_Solve()
+        game = A_Star_Search(self.init_state)
+        game.A_Star_Search_Solve()
 
 
-    def Hill_Climbing_Search(self) :
-        game = Hill_Climbing(self.init_state)
-        game.Hill_Climbing_solve()
+    def Steepest_Hill_Climbing_Search(self) :
+        game = Steepest_Ascent_Hill_Climbing(self.init_state)
+        game.Steepest_Hill_Climbing_solve()
+
+    def Simple_Hill_Climbing_Search(self) :
+        game = Simple_Hill_Climbing(self.init_state)
+        game.Simple_Hill_Climbing_solve()
 
          
    
