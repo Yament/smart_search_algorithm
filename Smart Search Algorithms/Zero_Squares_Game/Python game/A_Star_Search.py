@@ -77,7 +77,7 @@ class A_Star_Search:
                     total_cost = self.current_state.cost + state.cost
                     state.cost = total_cost          
                     state.Get_Manhattan_Distance_Hurestic()
-                    state.A_Star_Hurestic = state.cost + state.Manhattan_Distance_Hurestic          
+                    state.A_Star_Hurestic = state.cost + state.Manhattan_Distance_Hurestic      
                     self.visited.add(state)   
                     state.Parent = self.current_state                
                     heapq.heappush(self.priority_queue, state)                    

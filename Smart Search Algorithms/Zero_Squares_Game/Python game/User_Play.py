@@ -66,6 +66,8 @@ class User_Play:
                     x, y = x + dx, y + dy
                     break   
                 if self.current_state.player_Reach_To_Loss_Square(x, y, square):
+                    y = y + dy
+                    x = x + dx
                     break 
                 if self.current_state.player_Reach_To_Variable_Square(x, y, square):
                     self.current_state.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square)                    
@@ -78,6 +80,23 @@ class User_Play:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
 
 
 

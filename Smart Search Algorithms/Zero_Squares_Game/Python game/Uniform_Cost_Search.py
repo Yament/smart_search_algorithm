@@ -68,22 +68,20 @@ class Unifrom_Cost_Search:
                 self.Print_Path_Goal(self.current_state)
                 self.Get_Time_and_Meomory(start_time , initial_memory)
                 return None 
-            # print("the cost for the following state is :")
-            # print(self.current_state.cost)
             # print(self.current_state)
             self.Draw.draw_Screen_Game(self.current_state.board)     
             Next_States = self.current_state.Get_Next_States()  
             if (not Next_States) :
                 continue        
-            for state in Next_States :               
+            for state in Next_States :  
+                total_cost = self.current_state.cost + state.cost
+                state.cost = total_cost    
+                state.Parent = self.current_state           
                 if state.isLoss() :
                     continue
-                if state not in self.visited :
-                    total_cost = self.current_state.cost + state.cost
-                    state.cost = total_cost                    
-                    self.visited.add(state)   
-                    state.Parent = self.current_state                
-                    heapq.heappush(self.priority_queue, state)                    
+                if state not in self.visited :                   
+                    self.visited.add(state)                  
+                    heapq.heappush(self.priority_queue, state) 
         return None
        
             

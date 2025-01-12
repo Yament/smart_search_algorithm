@@ -4,7 +4,6 @@ from Directions import Directions
 import copy
 
 class State:
-
     def __init__(self,rows,cols,board)-> None:
         self.rows = rows
         self.cols = cols
@@ -26,11 +25,11 @@ class State:
         new_state.y = self.cols 
         return new_state 
 
-    def __lt__(self, other):
-        return self.A_Star_Hurestic < other.A_Star_Hurestic 
-    
     # def __lt__(self, other):
-    #     return self.cost < other.cost
+    #     return self.A_Star_Hurestic < other.A_Star_Hurestic 
+    
+    def __lt__(self, other):
+        return self.cost < other.cost 
 
     def Get_Variable_Square(self):
         for row in self.board:
@@ -235,18 +234,23 @@ class State:
                         break   
                     if parent.player_Reach_To_Loss_Square(x, y, square):
                         loss_Square = True
+                        x, y = x + dx, y + dy
                         break   
                     if (parent.player_Reach_To_Variable_Square(x, y, square)) :
                         parent.change_Variable_Square_To_Goal_Square(square.x + x, square.y + y, square.target_square) 
+                        # i = i + 1
                     i = i + 1
                 new_x, new_y = square.x + x - dx , square.y + y - dy
                 square.new_x, square.new_y = new_x, new_y
                 parent.change_Player_Move(square) 
             parent.cost = i
+            # parent.cost += 5
             if loss_Square == True:
-                    continue   
+                    parent.cost = 100
+                    # continue   
             if parent.Check_If_Accept_state():
-                continue  
+                parent.cost = 100
+                # continue  
             Next_States.append(parent)  
         return Next_States
  

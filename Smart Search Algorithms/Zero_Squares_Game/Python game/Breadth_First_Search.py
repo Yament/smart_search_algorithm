@@ -36,6 +36,8 @@ class Breadth_First_Search:
         print("all States That Generated Path are:")
         print('\n')
         for state in self.Path_Goal_List :
+            print("the cost for the following state is :")
+            print(state.cost)
             print (state)
 
         print("the Number States From Init State To Goal State are :")
